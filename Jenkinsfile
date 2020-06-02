@@ -20,9 +20,9 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'password', usernameVariable: 'user')]) {
-                    sh 'docker login -u albapc -p $password'
-                    sh 'docker tag app:test albapc/app:stable'
-                    sh 'docker push albapc/app:stable'
+                    sh 'docker login -u $user -p $password'
+                    sh 'docker tag app:test $user/app:stable'
+                    sh 'docker push $user/app:stable'
                     sh 'docker rm -f app'
                 }
             }
