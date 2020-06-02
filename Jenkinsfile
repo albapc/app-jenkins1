@@ -1,45 +1,22 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      parallel {
+    agent any
+
+    stages {
         stage('Build') {
-          steps {
-            echo 'Building..'
-          }
+            steps {
+                echo 'Building..'
+		sh 'docker build -t app .'
+            }
         }
-
-        stage('Inicio') {
-          steps {
-            echo 'Hola desde stage inicio'
-          }
-        }
-
-      }
-    }
-
-    stage('Test') {
-      parallel {
         stage('Test') {
-          steps {
-            echo 'Testing..'
-          }
+            steps {
+                echo 'Testing..'
+            }
         }
-
-        stage('Test2') {
-          steps {
-            echo 'Hola desde stage2'
-          }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
         }
-
-      }
     }
-
-    stage('Deploy') {
-      steps {
-        echo 'Deploying....'
-      }
-    }
-
-  }
 }
