@@ -5,13 +5,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-		        sh 'docker build -t app .'
+		        sh 'docker build -t app:test .'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
-		        sh 'docker run -d -p 80:80 --rm app'
+		        sh 'docker run -d --name app app:test'
 		        sh '/bin/nc -vz localhost 80'
                 sh 'docker stop app'
             }
@@ -19,8 +19,10 @@ pipeline {
         stage('Push Registry') {
             steps {
                 echo 'Deploying....'
-                sh 'docker tag app albapc/app:stable'
-                sh 'docker push albapc/app:stable'
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'user')]) {
+                    sh 'docker tag app:test albapc/app:stable'
+                    sh 'docker push albapc/app:stable'
+                }
             }
         }
     }
