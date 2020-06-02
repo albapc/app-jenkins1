@@ -20,7 +20,7 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'password', usernameVariable: 'user')]) {
-                    sh 'docker login -u $user -p $password'
+                    sh 'winpty docker login -u $user -p $password'
                     sh 'docker tag app:test albapc/app:stable'
                     sh 'docker push albapc/app:stable'
                 }
